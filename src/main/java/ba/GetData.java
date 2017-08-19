@@ -1,11 +1,8 @@
 package ba;
 
 import java.net.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -51,6 +48,7 @@ public class GetData implements Runnable {
 	}
 
 	public void getData() throws Exception {
+		ValueMapper vm = new ValueMapper();
 		String data = "";
 		StringBuilder sb = new StringBuilder();
 		URL getUrl = new URL(url);
@@ -61,30 +59,14 @@ public class GetData implements Runnable {
 			sb.append(data);
 		}
 		br.close();
-		// System.out.println(sb.toString());
-		Map<String, Object> config = new HashMap<>();
-		config.put("javax.json.stream.JsonGenerator.prettyPrinting", Boolean.valueOf(true));
-		JsonBuilderFactory factory = javax.json.Json.createBuilderFactory(config);
 		JSONObject json = new JSONObject(sb.toString());
 		JSONArray array = json.getJSONArray("features");
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject obj = array.getJSONObject(i);
-			JSONObject properties = obj.getJSONObject("properties");
+			
+			
 
-			String rawtime = properties.getString("timestamp").replace(".", "-");
-			String[] t = rawtime.split("-");
-
-			String[] clock = t[2].split("�");
-			String timeString = clock[0] + "-" + t[1] + "-" + t[0] + " " + clock[1] + ":00";
-			long time = java.sql.Timestamp.valueOf(timeString).getTime();
-			JsonObject object = factory.createObjectBuilder().add("timestamp", time)
-					.add("station", properties.getString("station")).add("lat", properties.getDouble("lat"))
-					.add("lng", properties.getDouble("lng")).add("heigth", properties.getInt("hoehe")).add("temp", "")
-					.add("ozn", properties.getString("ozon"))
-					.add("lux", properties.getString("luqx"))
-					.add("no2", properties.getString("no2kont"))
-					.add("so2", properties.getString("so2"))
-					.build();
+			JsonObject object = vm.mapValues(obj);
 			byte[] bytes = null;
 			try {
 				bytes = object.toString().getBytes("UTF-8");
