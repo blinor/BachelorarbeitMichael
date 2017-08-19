@@ -82,7 +82,7 @@ public class GetData implements Runnable {
 					.add("lng", properties.getDouble("lng")).add("heigth", properties.getInt("hoehe")).add("temp", "")
 //					.add("ozn", properties.getString("ozon"))
 					.add("lux", properties.getString("luqx"))
-					.add("no2", properties.getString("no2kont"))
+//					.add("no2", properties.getString("no2kont"))
 //					.add("so2", properties.getString("so2"))
 					.build();
 			byte[] bytes = null;
