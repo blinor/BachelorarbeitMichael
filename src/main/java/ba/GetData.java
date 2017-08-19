@@ -80,10 +80,10 @@ public class GetData implements Runnable {
 			JsonObject object = factory.createObjectBuilder().add("timestamp", time)
 					.add("station", properties.getString("station")).add("lat", properties.getDouble("lat"))
 					.add("lng", properties.getDouble("lng")).add("heigth", properties.getInt("hoehe")).add("temp", "")
-//					.add("ozn", properties.getString("ozon"))
+					.add("ozn", properties.getString("ozon"))
 					.add("lux", properties.getString("luqx"))
-//					.add("no2", properties.getString("no2kont"))
-//					.add("so2", properties.getString("so2"))
+					.add("no2", properties.getString("no2kont"))
+					.add("so2", properties.getString("so2"))
 					.build();
 			byte[] bytes = null;
 			try {
