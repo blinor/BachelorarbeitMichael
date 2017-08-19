@@ -28,9 +28,9 @@ public class Producer {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Give Kafka Topic");
 		topic = sc.nextLine();
-		System.out.println("Give Bootstrap-Server");
+//		System.out.println("Give Bootstrap-Server");
 		String server = "localhost:9092";
-		server = sc.nextLine();
+//		server = sc.nextLine();
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
 		props.put(ProducerConfig.RETRIES_CONFIG, "3");
