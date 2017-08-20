@@ -22,14 +22,13 @@ public class GetData implements Runnable {
 		this.producer = new KafkaProducer<>(prop);
 		this.topic = topic;
 		this.url = url;
-		this.hours = Long.parseLong(input) * 3600000;
+		this.hours = Long.parseLong(input) * 60000;
 		this.number = Integer.parseInt(n);
 	}
 
 	public void run() {
 		while (number != 0) {
 			try {
-				System.out.println(hours);
 				getData();
 
 			} catch (Exception e) {
@@ -45,10 +44,13 @@ public class GetData implements Runnable {
 			number--;
 
 		}
+		System.out.println("Stopped Request-Limit Reached");
 	}
 
 	public void getData() throws Exception {
 		ValueMapper vm = new ValueMapper();
+		String bl = url.split("land=")[1].split("&")[0];
+		System.out.println(bl);
 		String data = "";
 		StringBuilder sb = new StringBuilder();
 		URL getUrl = new URL(url);
@@ -63,15 +65,11 @@ public class GetData implements Runnable {
 		JSONArray array = json.getJSONArray("features");
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject obj = array.getJSONObject(i);
-			
-			
-
-			JsonObject object = vm.mapValues(obj);
+			JsonObject object = vm.mapValues(obj, bl);
 			byte[] bytes = null;
 			try {
 				bytes = object.toString().getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			producer.send(new ProducerRecord<String, Object>(topic, bytes));

@@ -1,10 +1,11 @@
 package ba;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
-
 import org.json.JSONObject;
 
 public class ValueMapper {
@@ -30,16 +31,34 @@ public class ValueMapper {
 		return buildJson(time, array[0], 0, 0, 0, temp, 0, 0, 0, 0);
 	}
 
-	public JsonObject mapValues(JSONObject test) {
+	public JsonObject mapValues(JSONObject test, String bl) {
+		SimpleDateFormat sd = null;
+		long time = 0;
+		switch(bl){
+		case("by"):
+			sd = new SimpleDateFormat("dd.mm.YYYY HH:MM");
+			break;
+		case("bw"):
+			sd = new SimpleDateFormat("dd.mm.YYYY�HH:MM");
+			break;
+		case("st"):
+			sd = new SimpleDateFormat("dd.mm. HH:MM");
+		default:
+			sd = new SimpleDateFormat("dd.mm.YYYY HH:MM");
+			break;
+		}
 
 		JSONObject properties = test.getJSONObject("properties");
-
-		String rawtime = properties.getString("timestamp").replace(".", "-");
-		String[] t = rawtime.split("-");
-
-		String[] clock = t[2].split("�");
-		String timeString = clock[0] + "-" + t[1] + "-" + t[0] + " " + clock[1] + ":00";
-		long time = java.sql.Timestamp.valueOf(timeString).getTime();
+//		System.out.println(properties.getString("timestamp"));
+		Date d = null;
+		try {
+			d = sd.parse(properties.getString("timestamp"));
+			time = d.getTime();
+		} catch (Exception e) {
+			time = System.currentTimeMillis();
+		}
+		
+		
 		double temp = 0;
 		try {
 			temp = properties.getDouble("temp");
@@ -65,7 +84,14 @@ public class ValueMapper {
 			so2 = Integer.parseInt(properties.getString("so2"));
 		} catch (Exception e) {
 		}
-		return buildJson(time, properties.getString("kennung"), properties.getDouble("lat"),
+		String kennung="";
+		try {
+			
+			kennung = properties.getString("kennung");
+		} catch (Exception e) {
+			kennung = properties.getString("station");
+		}
+		return buildJson(time,kennung , properties.getDouble("lat"),
 				properties.getDouble("lng"), properties.getInt("hoehe"), temp, ozon, lux, no2, so2);
 	}
 }
