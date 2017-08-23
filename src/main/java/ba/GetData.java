@@ -45,9 +45,14 @@ public class GetData implements Runnable {
 
 		}
 		System.out.println("Stopped Request-Limit Reached");
+		producer.close();
 	}
 
 	public void getData() throws Exception {
+		long timeRequest = System.currentTimeMillis();
+		RESTSwitcher rs = new RESTSwitcher();
+		System.out.println(url.replaceAll("http://", "").replaceAll("[.].*", ""));
+		String[] values = rs.getJsonFormat(url.replaceAll("http://", "").replaceAll("[.].", ""));
 		ValueMapper vm = new ValueMapper();
 		String bl = url.split("land=")[1].split("&")[0];
 		System.out.println(bl);
@@ -62,10 +67,10 @@ public class GetData implements Runnable {
 		}
 		br.close();
 		JSONObject json = new JSONObject(sb.toString());
-		JSONArray array = json.getJSONArray("features");
+		JSONArray array = json.getJSONArray(values[0]);
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject obj = array.getJSONObject(i);
-			JsonObject object = vm.mapValues(obj, bl);
+			JsonObject object = vm.mapValues(obj, bl, values, timeRequest);
 			byte[] bytes = null;
 			try {
 				bytes = object.toString().getBytes("UTF-8");
@@ -77,5 +82,6 @@ public class GetData implements Runnable {
 			System.out.println("Send!" + object);
 		}
 		System.out.println("Finished");
+		
 	}
 }

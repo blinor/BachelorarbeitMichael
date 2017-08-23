@@ -5,20 +5,24 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Properties;
+
 import javax.json.JsonObject;
 
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class CsvReader {
 	org.apache.kafka.clients.producer.Producer<String, Object> producer;
 	String topic;
 
-	public CsvReader(org.apache.kafka.clients.producer.Producer<String, Object> p, String topic) {
-		producer = p;
+	public CsvReader(Properties prop, String topic) {
+		producer = new KafkaProducer<>(prop);
 		this.topic = topic;
 	}
 
 	public void sendData(String file) {
+		long timeRequest = System.currentTimeMillis();
 		ValueMapper vm = new ValueMapper();
 		ArrayList<String> data = new ArrayList<String>();
 		String line;
@@ -41,7 +45,7 @@ public class CsvReader {
 		}
 		for (int i = 1; i < (data.size() / 10); i++) {
 
-			JsonObject object = vm.mapValues(data.get(i));
+			JsonObject object = vm.mapValues(data.get(i), timeRequest);
 			
 			byte[] bytes = null;
 			try {
@@ -56,7 +60,7 @@ public class CsvReader {
 
 		}
 		System.out.println("Finished");
-
+		producer.close();
 	}
 
 }
