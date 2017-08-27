@@ -22,7 +22,7 @@ public class Producer {
 		Thread[] threads = new Thread[maxthreads];
 		int counter = 0;
 		String topic = "my.weather.lubw";
-//		String topic = "test";
+		// String topic = "test";
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		String server = "localhost:9092";
@@ -39,9 +39,15 @@ public class Producer {
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
 				"org.apache.kafka.common.serialization.ByteArraySerializer");
-		
+
 		String in = "http;http://lupo-messwerte.appspot.com/lupo_luft_query?land=bw&limit=500&format=gme;1;-1";
+
 		String[] input = in.split(";");
+		threads[counter] = new Thread(new GetData(props, topic, input[1], input[2], input[3]));
+		threads[counter].start();
+		counter++;
+		in = "http;http://lupo-messwerte.appspot.com/lupo_luft_query?land=by&limit=500&format=gme;1;-1";
+		input = in.split(";");
 		threads[counter] = new Thread(new GetData(props, topic, input[1], input[2], input[3]));
 		threads[counter].start();
 		counter++;

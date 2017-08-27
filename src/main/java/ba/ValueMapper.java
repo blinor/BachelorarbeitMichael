@@ -36,24 +36,26 @@ public class ValueMapper {
 		long time = 0;
 		switch (bl) {
 		case ("by"):
-			sd = new SimpleDateFormat("dd.mm.YYYY HH:MM");
+			sd = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 			break;
 		case ("bw"):
-			sd = new SimpleDateFormat("dd.mm.YYYY�HH:MM");
+			sd = new SimpleDateFormat("dd.MM.yyyy�HH:mm");
 			break;
 		case ("st"):
-			sd = new SimpleDateFormat("dd.mm. HH:MM");
+			sd = new SimpleDateFormat("dd.MM. HH:mm");
 		default:
-			sd = new SimpleDateFormat("dd.mm.YYYY HH:MM");
+			sd = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 			break;
 		}
-
+//		System.out.println(sd);
 		JSONObject properties = test.getJSONObject(values[1]);
-		// System.out.println(properties.getString("timestamp"));
+//		System.out.println(properties.getString("timestamp"));
 		Date d = null;
 		try {
-			d = sd.parse(properties.getString(values[2]));
+			d = sd.parse(properties.getString("timestamp"));
 			time = d.getTime();
+//			System.out.println(  d);
+			
 		} catch (Exception e) {
 			time = System.currentTimeMillis();
 		}
