@@ -1,0 +1,9 @@
+version: '2'
+services:
+  restproducer:
+    build: .
+    ports:
+      - "8090:8085"
+    volumes:
+      - \Users\micha\bachelorarbeit\apache:/root/.ba/restinterface
+

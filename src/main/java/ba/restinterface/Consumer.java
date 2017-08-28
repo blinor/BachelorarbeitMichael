@@ -1,4 +1,4 @@
-package ba;
+package ba.restinterface;
 
 import java.util.Arrays;
 import java.util.Properties;

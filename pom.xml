@@ -56,7 +56,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>ba.Producer</mainClass>
+							<mainClass>ba.restinterface.Producer</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

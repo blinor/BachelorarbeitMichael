@@ -1,4 +1,4 @@
-package ba;
+package ba.restinterface;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

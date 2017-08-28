@@ -1,4 +1,4 @@
-package ba;
+package ba.restinterface;
 
 import java.net.*;
 import java.util.Properties;
@@ -22,7 +22,7 @@ public class GetData implements Runnable {
 		this.producer = new KafkaProducer<>(prop);
 		this.topic = topic;
 		this.url = url;
-		this.hours = Long.parseLong(input) * 60000;
+		this.hours = Long.parseLong(input) * 10000;
 		this.number = Integer.parseInt(n);
 	}
 
@@ -49,13 +49,15 @@ public class GetData implements Runnable {
 	}
 
 	public void getData() throws Exception {
+
 		long timeRequest = System.currentTimeMillis();
 		RESTSwitcher rs = new RESTSwitcher();
-		System.out.println(url.replaceAll("http://", "").replaceAll("[.].*", ""));
+		// System.out.println(url.replaceAll("http://", "").replaceAll("[.].*",
+		// ""));
 		String[] values = rs.getJsonFormat(url.replaceAll("http://", "").replaceAll("[.].", ""));
 		ValueMapper vm = new ValueMapper();
 		String bl = url.split("land=")[1].split("&")[0];
-		System.out.println(bl);
+		// System.out.println(bl);
 		String data = "";
 		StringBuilder sb = new StringBuilder();
 		URL getUrl = new URL(url);
@@ -68,7 +70,8 @@ public class GetData implements Runnable {
 		br.close();
 		JSONObject json = new JSONObject(sb.toString());
 		JSONArray array = json.getJSONArray(values[0]);
-		for (int i = 0; i < array.length(); i++) {
+		int i = 0;
+		for (i = 0; i < array.length(); i++) {
 			JSONObject obj = array.getJSONObject(i);
 			JsonObject object = vm.mapValues(obj, bl, values, timeRequest);
 			byte[] bytes = null;
@@ -79,9 +82,10 @@ public class GetData implements Runnable {
 			}
 			producer.send(new ProducerRecord<String, Object>(topic, bytes));
 			producer.flush();
-			System.out.println("Send!" + object);
+//			System.out.println("Send!" + object);
 		}
-		System.out.println("Finished");
-		
+		System.out.println("Send " + i + " objects from " + url.replaceAll("http://", "").replaceAll("[.].*", "") + " "
+				+ bl + " in " + (System.currentTimeMillis() - timeRequest) + "ms");
+
 	}
 }

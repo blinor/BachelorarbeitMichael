@@ -1,4 +1,4 @@
-package ba;
+package ba.restinterface;
 
 import org.apache.kafka.clients.producer.*;
 
@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class Producer {
 	final static int maxthreads = 100;
+	long programStartTime;
 
 	public static void main(String[] args) throws Exception {
 		// if (args.length != 0) {
@@ -15,10 +16,12 @@ public class Producer {
 		// }
 		Producer p = new Producer();
 		p.push();
+
 	}
 
 	@SuppressWarnings("deprecation")
 	public void push() throws Exception {
+		programStartTime = System.currentTimeMillis();
 		Thread[] threads = new Thread[maxthreads];
 		int counter = 0;
 		String topic = "my.weather.lubw";

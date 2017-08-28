@@ -1,4 +1,4 @@
-package ba;
+package ba.restinterface;
 
 public class RESTSwitcher {
 	private String[] lupo = { "features", "properties", "timestamp", "kennung", "station", "lat", "lng", "hoehe",

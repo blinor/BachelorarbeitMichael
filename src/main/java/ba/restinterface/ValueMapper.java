@@ -1,4 +1,4 @@
-package ba;
+package ba.restinterface;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
