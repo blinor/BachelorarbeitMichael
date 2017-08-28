@@ -1,7 +1,7 @@
 version: '2'
 services:
   restproducer:
-    build: .
+    image: restproducer
     ports:
       - "8090:8085"
     volumes:

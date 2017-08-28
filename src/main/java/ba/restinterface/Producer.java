@@ -19,16 +19,14 @@ public class Producer {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public void push() throws Exception {
 		programStartTime = System.currentTimeMillis();
 		Thread[] threads = new Thread[maxthreads];
 		int counter = 0;
 		String topic = "my.weather.lubw";
 		// String topic = "test";
-		@SuppressWarnings("resource")
-		Scanner sc = new Scanner(System.in);
-		String server = "localhost:9092";
+//		Scanner sc = new Scanner(System.in);
+		String server = "10.0.75.1:9092";
 		// System.out.println("Give Kafka Topic");
 		// topic = sc.nextLine();
 		// System.out.println("Give Bootstrap-Server");
@@ -54,44 +52,44 @@ public class Producer {
 		threads[counter] = new Thread(new GetData(props, topic, input[1], input[2], input[3]));
 		threads[counter].start();
 		counter++;
-		while ((in = sc.nextLine()) != "stop") {
-			switch (in.split(";")[0]) {
-			case ("csv"):
-				CsvReader reader = new CsvReader(props, topic);
-				if (in.split(";").length != 2) {
-					reader.sendData("src/main/resources/test.csv");
-				} else {
-					reader.sendData(in.split(";")[1]);
-				}
-				break;
-			case ("http"):
-				if (counter < maxthreads) {
-					input = in.split(";");
-					threads[counter] = new Thread(new GetData(props, topic, input[1], input[2], input[3]));
-					threads[counter].start();
-					counter++;
-				} else {
-					System.out.println("MaxThreads reached");
-				}
-
-				break;
-			case ("stop"):
-				System.out.println("Exiting");
-				for (int i = 0; i < threads.length; i++) {
-					if (threads[1] != null)
-						threads[i].stop();
-				}
-				sc.close();
-				return;
-			default:
-				System.out.println("<csv;<PathToCSV>> will push csv values to kafka");
-				System.out.println(
-						"<http;<URL>;<Time to wait between pulls>;<Number of pulls(-1=∞ )>> will start a new pullservice in a new thread. Max 10 Threads");
-				System.out.println("<stop> will obviously stop");
-
-			}
-
-		}
+//		while ((in = sc.nextLine()) != "stop") {
+//			switch (in.split(";")[0]) {
+//			case ("csv"):
+//				CsvReader reader = new CsvReader(props, topic);
+//				if (in.split(";").length != 2) {
+//					reader.sendData("src/main/resources/test.csv");
+//				} else {
+//					reader.sendData(in.split(";")[1]);
+//				}
+//				break;
+//			case ("http"):
+//				if (counter < maxthreads) {
+//					input = in.split(";");
+//					threads[counter] = new Thread(new GetData(props, topic, input[1], input[2], input[3]));
+//					threads[counter].start();
+//					counter++;
+//				} else {
+//					System.out.println("MaxThreads reached");
+//				}
+//
+//				break;
+//			case ("stop"):
+//				System.out.println("Exiting");
+//				for (int i = 0; i < threads.length; i++) {
+//					if (threads[1] != null)
+//						threads[i].stop();
+//				}
+//				sc.close();
+//				return;
+//			default:
+//				System.out.println("<csv;<PathToCSV>> will push csv values to kafka");
+//				System.out.println(
+//						"<http;<URL>;<Time to wait between pulls>;<Number of pulls(-1=∞ )>> will start a new pullservice in a new thread. Max 10 Threads");
+//				System.out.println("<stop> will obviously stop");
+//
+//			}
+//
+//		}
 
 	}
 }
