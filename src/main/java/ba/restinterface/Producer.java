@@ -26,7 +26,7 @@ public class Producer {
 		String topic = "my.weather.lubw";
 		// String topic = "test";
 //		Scanner sc = new Scanner(System.in);
-		String server = "10.0.75.1:9092";
+		String server = "ipe-koi09:9092";
 		// System.out.println("Give Kafka Topic");
 		// topic = sc.nextLine();
 		// System.out.println("Give Bootstrap-Server");
