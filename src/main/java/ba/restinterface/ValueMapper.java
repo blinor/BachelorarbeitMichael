@@ -7,14 +7,10 @@ import javax.json.JsonObject;
 import org.json.JSONObject;
 
 public class ValueMapper {
-	JSONBuilder jb;
-	public ValueMapper() {
-		JSONBuilder jb = new JSONBuilder();
-	}
 
 
 	public JsonObject mapValues(String line, long requestTime) {
-
+		JSONBuilder jb = new JSONBuilder();
 		String[] array = line.split(";");
 		StringBuilder sb = new StringBuilder(array[3]);
 		sb.insert(10, " ");
@@ -26,6 +22,7 @@ public class ValueMapper {
 	}
 
 	public JsonObject mapValues(JSONObject test, String bl, String[] values, long requestTime) {
+		JSONBuilder jb = new JSONBuilder();
 		SimpleDateFormat sd = null;
 		long time = 0;
 		switch (bl) {

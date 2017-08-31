@@ -52,9 +52,10 @@ public class GetData implements Runnable {
 
 		long timeRequest = System.currentTimeMillis();
 		RESTSwitcher rs = new RESTSwitcher();
-		// System.out.println(url.replaceAll("http://", "").replaceAll("[.].*",
-		// ""));
 		String[] values = rs.getJsonFormat(url.replaceAll("http://", "").replaceAll("[.].", ""));
+		// System.out.println(url.replaceAll("http://",
+		// "").replaceAll("[.].*",""));
+	
 		ValueMapper vm = new ValueMapper();
 		String bl = url.split("land=")[1].split("&")[0];
 		// System.out.println(bl);
@@ -68,6 +69,8 @@ public class GetData implements Runnable {
 			sb.append(data);
 		}
 		br.close();
+		
+		
 		JSONObject json = new JSONObject(sb.toString());
 		JSONArray array = json.getJSONArray(values[0]);
 		int i = 0;
@@ -82,7 +85,7 @@ public class GetData implements Runnable {
 			}
 			producer.send(new ProducerRecord<String, Object>(topic, bytes));
 			producer.flush();
-//			System.out.println("Send!" + object);
+			// System.out.println("Send!" + object);
 		}
 		System.out.println("Send " + i + " objects from " + url.replaceAll("http://", "").replaceAll("[.].*", "") + " "
 				+ bl + " in " + (System.currentTimeMillis() - timeRequest) + "ms");
