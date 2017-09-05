@@ -29,12 +29,12 @@ public class Producer {
 		try {
 			bi = new BufferedInputStream(new FileInputStream("./src/main/java/ba/restinterface/prop.properties"));
 		} catch (FileNotFoundException e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		try {
 			prop.load(bi);
 		} catch (IOException e) {
-			// TODO: handle exception
+e.printStackTrace();
 		}
 		String[] urlInput = prop.getProperty("url").split(",");
 		programStartTime = System.currentTimeMillis();
@@ -42,11 +42,9 @@ public class Producer {
 		String topic = "my.weather.lubw";
 		// String topic = "test";
 		// Scanner sc = new Scanner(System.in);
-		String server = "ipe-koi09:9092";
-		// System.out.println("Give Kafka Topic");
-		// topic = sc.nextLine();
-		// System.out.println("Give Bootstrap-Server");
-		// server = sc.nextLine();
+		Config.INSTANCE.getKafkaHost();
+		String server = Config.INSTANCE.getKafkaHost()+":"+Config.INSTANCE.getKafkaPort();
+
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
 		props.put(ProducerConfig.RETRIES_CONFIG, "3");
