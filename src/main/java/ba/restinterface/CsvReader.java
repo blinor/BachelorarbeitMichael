@@ -7,10 +7,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javax.json.JsonObject;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.json.JSONObject;
 
 public class CsvReader {
 	org.apache.kafka.clients.producer.Producer<String, Object> producer;
@@ -33,7 +33,6 @@ public class CsvReader {
 				data.add(line);
 			}
 		} catch (IOException e) {
-			// TODO: handle exception
 		} finally {
 			if (br != null) {
 				try {
@@ -45,13 +44,12 @@ public class CsvReader {
 		}
 		for (int i = 1; i < (data.size() / 10); i++) {
 
-			JsonObject object = vm.mapValues(data.get(i), timeRequest);
+			JSONObject object = vm.mapValues(data.get(i), timeRequest);
 			
 			byte[] bytes = null;
 			try {
 				bytes = object.toString().getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			producer.send(new ProducerRecord<String, Object>(topic, bytes));

@@ -3,7 +3,6 @@ package ba.restinterface;
 import java.net.*;
 import java.util.Properties;
 
-import javax.json.JsonObject;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.json.JSONArray;
@@ -51,8 +50,9 @@ public class GetData implements Runnable {
 	public void getData() throws Exception {
 
 		long timeRequest = System.currentTimeMillis();
-		RESTSwitcher rs = new RESTSwitcher();
+		RESTSwitcher rs = RESTSwitcher.getInstance();
 		String[] values = rs.getJsonFormat(url.replaceAll("http://", "").replaceAll("[.].", ""));
+//		String[] values = rs.getJsonFormat(url.replaceAll("http://", "").replaceAll("[.].", ""));
 		// System.out.println(url.replaceAll("http://",
 		// "").replaceAll("[.].*",""));
 	
@@ -76,7 +76,7 @@ public class GetData implements Runnable {
 		int i = 0;
 		for (i = 0; i < array.length(); i++) {
 			JSONObject obj = array.getJSONObject(i);
-			JsonObject object = vm.mapValues(obj, bl, values, timeRequest);
+			JSONObject object = vm.mapValues(obj, bl, values, timeRequest);
 			byte[] bytes = null;
 			try {
 				bytes = object.toString().getBytes("UTF-8");
@@ -85,7 +85,7 @@ public class GetData implements Runnable {
 			}
 			producer.send(new ProducerRecord<String, Object>(topic, bytes));
 			producer.flush();
-			// System.out.println("Send!" + object);
+//			System.out.println("Send!" + object);
 		}
 		System.out.println("Send " + i + " objects from " + url.replaceAll("http://", "").replaceAll("[.].*", "") + " "
 				+ bl + " in " + (System.currentTimeMillis() - timeRequest) + "ms");

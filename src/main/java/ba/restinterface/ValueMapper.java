@@ -2,14 +2,14 @@ package ba.restinterface;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
-import javax.json.JsonObject;
+//import javax.json.JsonObject;
 import org.json.JSONObject;
 
 public class ValueMapper {
 
-
-	public JsonObject mapValues(String line, long requestTime) {
+	public JSONObject mapValues(String line, long requestTime) {
 		JSONBuilder jb = new JSONBuilder();
 		String[] array = line.split(";");
 		StringBuilder sb = new StringBuilder(array[3]);
@@ -18,10 +18,10 @@ public class ValueMapper {
 		long time = java.sql.Timestamp.valueOf(sb.toString()).getTime();
 		int temp = (int) Double.parseDouble(array[4]);
 
-		return jb.buildJson(time, requestTime, array[0], 0, 0, 0, temp, 0, 0, 0);
+		return jb.buildJson(time, requestTime, array[0], 0, 0, 0, temp, 0, 0, 0, 0);
 	}
 
-	public JsonObject mapValues(JSONObject test, String bl, String[] values, long requestTime) {
+	public JSONObject mapValues(JSONObject test, String bl, String[] values, long requestTime) {
 		JSONBuilder jb = new JSONBuilder();
 		SimpleDateFormat sd = null;
 		long time = 0;
@@ -32,14 +32,13 @@ public class ValueMapper {
 		case ("bw"):
 			sd = new SimpleDateFormat("dd.MM.yyyy�HH:mm");
 			break;
-		case ("st"):
-			sd = new SimpleDateFormat("dd.MM. HH:mm");
 		default:
 			sd = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 			break;
 		}
-		// System.out.println(sd);
+		sd.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
 		JSONObject properties = test.getJSONObject(values[1]);
+		// System.out.println(sd);
 		// System.out.println(properties.getString("timestamp"));
 		Date d = null;
 		try {
@@ -71,14 +70,19 @@ public class ValueMapper {
 			so2 = Integer.parseInt(properties.getString(values[11]));
 		} catch (Exception e) {
 		}
+		int pm10 = 0;
+		try {
+			pm10 = Integer.parseInt(properties.getString(values[12]));
+		} catch (Exception e) {
+		}
 		String kennung = "";
 		try {
 
-			kennung = properties.getString(values[3]);
-		} catch (Exception e) {
 			kennung = properties.getString(values[4]);
+		} catch (Exception e) {
+			kennung = properties.getString(values[3]);
 		}
 		return jb.buildJson(time, requestTime, kennung, properties.getDouble(values[5]),
-				properties.getDouble(values[6]), properties.getInt(values[7]), ozon, lux, no2, so2);
+				properties.getDouble(values[6]), properties.getInt(values[7]), ozon, lux, no2, so2, pm10);
 	}
 }
