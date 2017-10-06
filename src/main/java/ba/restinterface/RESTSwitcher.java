@@ -1,47 +1,44 @@
 package ba.restinterface;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
+/**
+ * @author Michael Jahns this will cache the REST data information to parse them
+ *         correctly meant to be a singleton in a own thread, so there won't be
+ *         instances for every RequestThread. It's a Thread to be able to set it
+ *         to sleep without interfering with the other components
+ */
 public class RESTSwitcher extends Thread {
-	public Properties prop;
 	private static RESTSwitcher instance;
 	private Map<String, String[]> map;
 
+	/**
+	 * Private, because Singleton
+	 */
 	private RESTSwitcher() {
-		prop = new Properties();
 		map = new HashMap<>();
 		start();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Thread#run()
+	 */
 	public void run() {
 		while (true) {
-			BufferedInputStream bi = null;
-			try {
-				bi = new BufferedInputStream(
-						new FileInputStream("./src/main/java/ba/restinterface/RestService.properties"));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			try {
-				prop.load(bi);
-				System.out.println("Loaded new Prop");
-				System.out.println(prop.getProperty("lupo"));
-				Set<String> test =  prop.stringPropertyNames();
-				for (String i : test) {
-					map.put(i, prop.getProperty(i).split(","));				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			String[] services = Config.INSTANCE.getConfig().split(";");
+
+			System.out.println("Loaded new Prop");
+
+			for (int i = 0; i < services.length; i++) {
+				String[] content = services[i].split("=");
+				map.put(content[0], content[1].split(","));
 			}
 
 			try {
-				Thread.sleep(3600000);
+				Thread.sleep(600000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -49,6 +46,9 @@ public class RESTSwitcher extends Thread {
 		}
 	}
 
+	/**
+	 * @return Instance(to be a Singleton )
+	 */
 	public static RESTSwitcher getInstance() {
 		if (RESTSwitcher.instance == null) {
 			RESTSwitcher.instance = new RESTSwitcher();
@@ -57,9 +57,13 @@ public class RESTSwitcher extends Thread {
 
 	}
 
+	/**
+	 * @param in
+	 *            "Name" of the REST-Interface
+	 * @return Config of the datas
+	 */
 	public String[] getJsonFormat(String in) {
 
-//		String[] out = prop.getProperty(in.split("-")[0]).split(",");
 		String[] out = map.get(in.split("-")[0]);
 		return out;
 	}

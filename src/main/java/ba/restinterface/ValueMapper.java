@@ -7,8 +7,16 @@ import java.util.TimeZone;
 //import javax.json.JsonObject;
 import org.json.JSONObject;
 
+/**
+ * @author Michael Jahns
+ * Class to Match the Data by the server to the format StreamPipes must have
+ */
 public class ValueMapper {
 
+	/**
+	 * @return JsonObject to send
+	 * WIll be used for CSV files
+	 */
 	public JSONObject mapValues(String line, long requestTime) {
 		JSONBuilder jb = new JSONBuilder();
 		String[] array = line.split(";");
@@ -21,6 +29,11 @@ public class ValueMapper {
 		return jb.buildJson(time, requestTime, array[0], 0, 0, 0, temp, 0, 0, 0, 0);
 	}
 
+	/**
+	 * @param values the "Buildlog" of the Rest-Interface data
+	 * @return JsonObject to send
+	 * Will be used for REST-Interface data
+	 */
 	public JSONObject mapValues(JSONObject test, String bl, String[] values, long requestTime) {
 		JSONBuilder jb = new JSONBuilder();
 		SimpleDateFormat sd = null;

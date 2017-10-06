@@ -12,15 +12,27 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.json.JSONObject;
 
+/**
+ * @author Michael Jahns
+ * This can be used to Convert a CSV-File to JSONs and send them over Kafka
+ */
 public class CsvReader {
 	org.apache.kafka.clients.producer.Producer<String, Object> producer;
 	String topic;
 
+	/**
+	 * @param prop Kafka Properties	
+	 * @param topic  Topic to push to 
+	 */
 	public CsvReader(Properties prop, String topic) {
 		producer = new KafkaProducer<>(prop);
 		this.topic = topic;
 	}
 
+	/**
+	 * @param file FIle to read and send to Kafka
+	 * 
+	 */
 	public void sendData(String file) {
 		long timeRequest = System.currentTimeMillis();
 		ValueMapper vm = new ValueMapper();
