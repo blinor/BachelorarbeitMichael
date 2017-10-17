@@ -69,7 +69,6 @@ public class GetData implements Runnable {
 	 */
 	public void getData() throws Exception {
 
-		long timeRequest = System.currentTimeMillis();
 		RESTSwitcher rs = RESTSwitcher.getInstance();
 		String[] values = rs.getJsonFormat(url.replaceAll("http://", "").replaceAll("[.].", ""));
 	
@@ -90,7 +89,7 @@ public class GetData implements Runnable {
 		br.close();
 //		con.disconnect();
 		
-		
+		long timeRequest = System.currentTimeMillis();
 		JSONObject json = new JSONObject(sb.toString()); //Serveranswer to JSON
 		JSONArray array = json.getJSONArray(values[0]);
 		int i = 0;
