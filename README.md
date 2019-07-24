@@ -1,4 +1,4 @@
-# bacherlorabreitMichael
+# Bachelorarbeit 
 This is the KafkaProducer for the Weatherstream provided by Rest-Interface
 #Deployment
 You need to modify in your Consul-Instance the url field in the restporducer path (looks sth. like this SP/V1/PE/ORG.STREAMPIPES.BIGGIS.PE.BA.RESTINTERFACE/) and add the desired URL and its configuration 
